@@ -39,8 +39,17 @@
             display: flex;
             align-items: center;
         }
+
         .slider-container label {
             margin-right: 10px;
+        }
+
+        .new-timezone-container {
+            display: flex;
+            flex-direction: column;
+            margin: 10px;
+            padding: 7px;
+            background-color: #002f5f;
         }
 
         #clock, #canvas {
@@ -64,8 +73,19 @@
         <span id="hourValue">0</span>
     </div>
 
+    <div class="new-timezone-container">
+        <div>New timezone</div>
+        <label>Name: <input id="timezoneName" value="Someone"></label>
+        <label><a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">Timezone</a>: <input id="timezoneId" value="Asia/Tokyo"></label>
+        <label>Offset:
+            <input type="range" id="timezoneHourOffsetSlider" min="-12" max="12" value="0" step="1">
+            <span id="timezoneHourOffsetValue">0</span>
+        </label>
+        <button id="addTimezone">Add</button>
+    </div>
+
     <script>
-        const timezones = [
+        const defaultTimezones = [
             { name: "New York", timeZone: "America/New_York", offset: -5 },
             { name: "London", timeZone: "Europe/London", offset: 0 },
             { name: "Berlin", timeZone: "Europe/Berlin", offset: 1 },
@@ -77,6 +97,7 @@
             { name: "Sydney", timeZone: "Australia/Sydney", offset: 10 },
             { name: "Los Angeles", timeZone: "America/Los_Angeles", offset: -8 }
         ];
+        let timezones = [];
 
         const clock = document.getElementById("clock");
         const hourOffsetSlider = document.getElementById("hourOffset");
@@ -85,6 +106,18 @@
         const daylightRadius = 200;
         const clockWidth = 400;
         const clockHeight = 400;
+
+        function loadSettings() {
+            try {
+                const settings = JSON.parse(localStorage["worldClock"]) || {};
+                timezones = settings.timezones || defaultTimezones;
+            }
+            catch(e) {
+                timezones = defaultTimezones;
+            };
+        }
+
+        loadSettings();
 
         function updateClock() {
             clock.innerHTML = ""; // Clear existing elements
@@ -119,6 +152,27 @@
         hourOffsetSlider.addEventListener("input", () => {
             hourValue.textContent = hourOffsetSlider.value;
             updateClock();
+        });
+
+        const timezoneName = document.getElementById("timezoneName");
+        const timezoneId = document.getElementById("timezoneId");
+        const timezoneHourOffsetSlider = document.getElementById("timezoneHourOffsetSlider");
+        const timezoneHourOffsetValue = document.getElementById("timezoneHourOffsetValue");
+        const addTimezoneButton = document.getElementById("addTimezone");
+
+        addTimezoneButton.addEventListener("click", function addTimezone() {
+            timezones.push({
+                name: timezoneName.value,
+                timeZone: timezoneId.value,
+                offset: parseFloat(timezoneHourOffsetValue.textContent),
+            });
+            localStorage["worldClock"] = JSON.stringify({
+                timezones
+            });
+        });
+
+        timezoneHourOffsetSlider.addEventListener("input", () => {
+            timezoneHourOffsetValue.textContent = timezoneHourOffsetSlider.value;
         });
 
         updateClock();
