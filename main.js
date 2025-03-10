@@ -24,7 +24,7 @@ const daylightRadius = 160;
 const clockWidth = 400;
 const clockHeight = 400;
 const workHourStart = 9;
-const workHourEnd = 16;
+const workHourEnd = 18;
 
 function loadSettings() {
     try {
@@ -56,8 +56,8 @@ function updateClock() {
     ctx.strokeStyle = "#3f7faf";
     ctx.beginPath();
     ctx.arc(clockWidth / 2, clockHeight / 2, daylightRadius + ctx.lineWidth / 2.,
-        (noon + (workHourStart - 12) * 180 / 12) * Math.PI / 180,
-        (noon + (workHourEnd - 12) * 180 / 12) * Math.PI / 180);
+        (noon + (workHourStart - 6) * 180 / 12) * Math.PI / 180,
+        (noon + (workHourEnd - 6) * 180 / 12) * Math.PI / 180);
     ctx.stroke();
 
     for (let i = 0; i < 24; i++) {
@@ -79,7 +79,7 @@ function updateClock() {
         if (!showLabels.checked) {
             ctx.fillStyle = "#fff";
             ctx.font = "bold 20px sans-serif";
-            const text = `${i + 1}`;
+            const text = `${i}`;
             const tm = ctx.measureText(text);
             ctx.fillText(text, x2 - tm.width / 2, y2 + 10);
         }
