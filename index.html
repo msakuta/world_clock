@@ -77,6 +77,7 @@
         <div>New timezone</div>
         <label>Name: <input id="timezoneName" value="Someone"></label>
         <label><a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones">Timezone</a>: <input id="timezoneId" value="Asia/Tokyo"></label>
+        <label>Icon URL: <input id="timezoneIconUrl" value=""></label>
         <label>Offset:
             <input type="range" id="timezoneHourOffsetSlider" min="-12" max="12" value="0" step="1">
             <span id="timezoneHourOffsetValue">0</span>
@@ -145,6 +146,15 @@
                 person.style.top = `${y}px`;
                 person.innerHTML = `${tz.name}<br>${now.toLocaleTimeString('en-US', { timeZone: tz.timeZone })}`;
 
+                if (tz.iconUrl) {
+                    const icon = document.createElement("img");
+                    icon.src = tz.iconUrl;
+                    icon.style.position = "relative";
+                    icon.style.width = "32px";
+                    icon.style.height = "32px";
+                    person.appendChild(icon);
+                }
+
                 clock.appendChild(person);
             });
         }
@@ -156,6 +166,7 @@
 
         const timezoneName = document.getElementById("timezoneName");
         const timezoneId = document.getElementById("timezoneId");
+        const timezoneIconUrl = document.getElementById("timezoneIconUrl");
         const timezoneHourOffsetSlider = document.getElementById("timezoneHourOffsetSlider");
         const timezoneHourOffsetValue = document.getElementById("timezoneHourOffsetValue");
         const addTimezoneButton = document.getElementById("addTimezone");
@@ -164,6 +175,7 @@
             timezones.push({
                 name: timezoneName.value,
                 timeZone: timezoneId.value,
+                iconUrl: timezoneIconUrl.value,
                 offset: parseFloat(timezoneHourOffsetValue.textContent),
             });
             localStorage["worldClock"] = JSON.stringify({
