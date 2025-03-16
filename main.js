@@ -47,11 +47,18 @@ function updateClock() {
     noon -= Math.floor(noon / 360) * 360;
 
     ctx.clearRect(0, 0, clockWidth, clockHeight);
+
     ctx.strokeStyle = "#afaf00";
     ctx.lineWidth = 8;
     ctx.beginPath();
     ctx.arc(clockWidth / 2, clockHeight / 2, daylightRadius - ctx.lineWidth / 2., noon * Math.PI / 180, (noon + 180) * Math.PI / 180);
     ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(clockWidth / 2, clockHeight / 2, radius, (noon + 180) * Math.PI / 180, noon * Math.PI / 180);
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fill();
+
     ctx.lineWidth = 8;
     ctx.strokeStyle = "#3f7faf";
     ctx.beginPath();
